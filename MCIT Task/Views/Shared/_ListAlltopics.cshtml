@@ -1,0 +1,146 @@
+﻿
+@model MCIT_Task.ViewModel.ListVM
+
+
+@{
+    ViewBag.Title = "ListAlltopics";
+}
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="~/Content/Site.css" rel="stylesheet" />
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="~/Content/Site.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row">
+        <h2 class="text-center">ListAlltopics</h2>
+        <button style=" margin-left: 20px; " class="btn  btn-primary " onclick="AddTopic()">New Topic</button>
+        <div id="mainDiv" class="col-md-12">
+
+            @foreach (var topic in Model.TopicsSortedByDAte)
+            {
+
+                <div class="row text-center">  @topic.Key.ToShortDateString() </div>
+                <div class="well">
+
+                    @foreach (var item in topic)
+                    {
+                        <div class="row">
+                            <div class="panel panel-default panel-horizontal">
+                                <div class="panel-heading text-center" style="width:10em;">
+                                    <img style="width:300px;height:300px" src="~/TopicsImages/@item.TopicDetails.Image" alt="@item.TopicDetails.Image" />
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-xs-12 col-md-12 section-box">
+                                        <div style="padding-top: 10px;">Topic Date :  @topic.Key.ToShortDateString()</div>
+                                        <h2>
+                                            @item.TopicTitle
+                                        </h2>
+                                        <p>
+                                            @item.TopicDetails.Description
+                                        </p>
+                                        <hr />
+                                        <div class="row rating-desc">
+                                            <div class="col-md-12">
+                                                <br />
+                                                <div class="pull-left">
+                                                    <a id="edit_btn" class="btn btn-success btn-round btn-just-icon btn-sm" onclick="EditTopic(@item.TopicId)">
+                                                        <i class="glyphicon glyphicon-edit"></i>Edit
+                                                    </a>
+                                                </div>
+
+
+
+                                                <div class="pull-right">
+                                                    <a title="Edit" class="btn btn-danger btn-sm" onclick="DeleteTopic( @item.TopicDetails.TopicDetailsId )">
+                                                        <i class="glyphicon glyphicon-edit"></i>delete
+                                                    </a>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+
+
+
+    function AddTopic() {
+        $.ajax({
+            url: '/topics/Create/',
+            type: 'get',
+            success: function (result) {
+                $("#mainDiv").html(result);
+            }
+            , error: function (res) {
+                alert(res)
+            }
+        });
+    }
+    function EditTopic(pid) {
+        $.ajax({
+            url: '/topics/EditTopic/',
+            type: 'get',
+            data: { id: pid },
+            success: function (result) {
+                $("#mainDiv").html(result);
+            }
+            , error: function (res) {
+                alert(res)
+            }
+        });
+
+    }
+
+    function DeleteTopic(pid) {
+        $.ajax({
+            url: '/topics/DeleteTopic/',
+            type: 'post',
+            data: { id: pid },
+            success: function (result) {
+                $.ajax({
+                    url: '/topics/ListAlltopics/',
+                    type: 'get',
+                    success: function (result) {
+                        $("#mainDiv").html(result);
+                    }
+                });
+                $("#mainDiv").html(result);
+            }
+            , error: function (res) {
+                alert(res);
+            }
+        });
+    }
+
+
+</script>

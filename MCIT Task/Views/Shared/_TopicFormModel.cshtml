@@ -1,0 +1,104 @@
+﻿@model MCIT_Task.Entites.topic
+
+@{
+
+    ViewBag.Title = ViewBag.Save;
+}
+
+<h2 style="margin-left: 240px;">@ViewBag.Save    </h2>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+
+<div class="col-md-5 well "  style="width:50%  ;margin-left: 240px;">
+
+    @using (Html.BeginForm("Save", "topics", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-horizontal">
+   
+            
+            <div class="form-group">
+                @Html.LabelFor(model => model.TopicDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TopicDate, new { htmlAttributes = new { @class = "form-control" } })
+                  
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.TopicTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TopicTitle, new { htmlAttributes = new { @class = "form-control" } })
+                    
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TopicDetails.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.TopicDetails.Description, 3, 40, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+            </div>
+            <div class="btn btn-default " style=" margin-left: 94px; margin-bottom:10px">
+                <input type="file" id="imgageFile" name="imgageFile">
+            </div>
+            <br />
+            <div class="form-group">
+                @Html.LabelFor(model => model.TopicIsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox" >
+                        @Html.EditorFor(model => model.TopicIsActive)
+                      
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="col-md-offset-2 col-md-10">
+                    @Html.HiddenFor(m => m.TopicId)
+                    @if (ViewBag.Save == "Create New")
+                    {
+                        <input type="submit" id="createBTN" value="Create" class="btn btn-primary" />
+                    }
+                    else
+                    {
+                        <input type="submit" value="Update" class="btn btn-primary" />
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+ 
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+
+    function ListTopics() {
+        $.ajax({
+            url: '/topics/ListAlltopics1/',
+            type: 'get',
+            success: function (result) {
+ 
+                $("#mainDiv").html(result);
+                 
+            }
+            , error: function (res) {
+                 
+                    alert(res)  }
+
+        });
+
+    }
+     
+
+    
+
+
+
+</script>
